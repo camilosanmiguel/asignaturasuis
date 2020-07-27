@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cupos_uis/src/search/search_delegate.dart';
 
 class Buscar extends StatelessWidget {
   const Buscar({
@@ -9,11 +10,27 @@ class Buscar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("sirve el click");
+        showSearch(
+          context: context,
+          delegate: GrupoSearch(),
+        );
       },
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         alignment: Alignment.centerLeft,
+        width: 280,
+        height: 35,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 0,
+                blurRadius: 15,
+                offset: Offset(0, 5))
+          ],
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -43,19 +60,6 @@ class Buscar extends StatelessWidget {
                 ],
               ),
             )
-          ],
-        ),
-        width: 250,
-        height: 35,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 0,
-                blurRadius: 15,
-                offset: Offset(0, 5))
           ],
         ),
       ),
