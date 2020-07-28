@@ -1,6 +1,14 @@
+import 'package:cupos_uis/src/pages/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 
 class GrupoSearch extends SearchDelegate {
+  GrupoSearch({@required String hintText})
+      : super(
+          searchFieldLabel: hintText,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -31,7 +39,16 @@ class GrupoSearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container();
+    return Center(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 30),
+          CardGruop(),
+          SizedBox(height: 30),
+          CardGruop(),
+        ],
+      ),
+    );
   }
 
   @override

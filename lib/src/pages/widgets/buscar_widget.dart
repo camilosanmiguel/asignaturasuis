@@ -12,7 +12,7 @@ class Buscar extends StatelessWidget {
       onTap: () {
         showSearch(
           context: context,
-          delegate: GrupoSearch(),
+          delegate: GrupoSearch(hintText: "Busca Un Grupo"),
         );
       },
       child: Container(
