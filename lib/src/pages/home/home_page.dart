@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'widgets/header.dart';
 import 'widgets/body.dart';
+import 'widgets/subheader.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -17,6 +18,7 @@ class HomePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Header(),
+              SubHeader(),
               Body(),
             ],
           ),

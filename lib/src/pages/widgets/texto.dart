@@ -9,14 +9,15 @@ class Texto extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Center(
-          child: Text(
-        "No Tienes Ningun Grupo \nGuardado, Dale Click \nEn Buscar",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: Color(0xff9E9E9E),
+        child: Text(
+          "No Tienes Grupos \nGuardados Dale Click En\nBuscar Grupo",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Color(0xff9E9E9E),
+          ),
         ),
-      )),
+      ),
     );
   }
 }

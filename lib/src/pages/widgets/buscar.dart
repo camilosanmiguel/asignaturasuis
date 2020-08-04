@@ -35,7 +35,7 @@ class Buscar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(
-              "Busca Un Grupo",
+              "Busca Grupo",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Color(0xff9E9E9E),
