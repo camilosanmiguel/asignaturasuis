@@ -15,7 +15,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CursoCubit, List<Curso>>(
-      cubit: CursoCubit(),
+      //cubit: CursoCubit(),
       builder: (_, cursos) => cursos.isEmpty
           ? Texto()
           : Expanded(
@@ -23,7 +23,7 @@ class Body extends StatelessWidget {
                 itemCount: cursos.length,
                 itemBuilder: (_, i) => Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     child: SizedBox(
                       width: 320,
                       child: CardGroup(
