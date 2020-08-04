@@ -5,7 +5,7 @@ class Grupo {
   final int capacidad, matriculados;
   final List<Horario> horarios;
 
-  Grupo(this.nombreGrupo, this.capacidad, this.matriculados, this.horarios);
+  Grupo({this.nombreGrupo, this.capacidad, this.matriculados, this.horarios});
 
   Grupo.fromJson(Map<String, dynamic> parsedJson)
       : nombreGrupo = parsedJson['nombreGrupo'],

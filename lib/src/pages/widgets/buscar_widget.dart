@@ -18,7 +18,7 @@ class Buscar extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         alignment: Alignment.centerLeft,
-        width: 280,
+        width: 300,
         height: 35,
         decoration: BoxDecoration(
           color: Colors.white,

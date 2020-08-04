@@ -1,11 +1,16 @@
+import 'package:cupos_uis/src/models/curso.dart';
+import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:flutter/material.dart';
 
 class CardGruop extends StatelessWidget {
+  final Curso curso;
+  CardGruop({@required this.curso});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      width: 280,
+      //width: 280,
       decoration: BoxDecoration(
         color: Color(0xFFEDEDED),
         borderRadius: BorderRadius.circular(20),
@@ -19,26 +24,26 @@ class CardGruop extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          headerCard("CALCULO I", "20252"),
-          linea(),
-          bodyCard(),
-          linea(),
-          bodyCard(),
+          headerCard(),
+          for (Grupo grupo in curso.grupos)
+            Column(
+              children: <Widget>[linea(), bodyCard(grupo: grupo)],
+            )
         ],
       ),
     );
   }
 
-  Widget headerCard(String nombre, String codigo) {
+  Widget headerCard() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          nombre,
+          curso.nombre,
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         Text(
-          codigo,
+          "${curso.codigo}",
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
       ],
@@ -64,7 +69,7 @@ class CardGruop extends StatelessWidget {
     );
   }
 
-  Widget bodyCard() {
+  Widget bodyCard({Grupo grupo}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -85,7 +90,7 @@ class CardGruop extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    "B1",
+                    grupo.nombreGrupo,
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -101,7 +106,7 @@ class CardGruop extends StatelessWidget {
           ],
         ),
         Text(
-          "18 / 18",
+          "${grupo.matriculados}/${grupo.capacidad}",
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16,
