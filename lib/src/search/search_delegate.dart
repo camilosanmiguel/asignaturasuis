@@ -1,4 +1,3 @@
-import 'package:cupos_uis/src/pages/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 
 class GrupoSearch extends SearchDelegate {
@@ -43,9 +42,9 @@ class GrupoSearch extends SearchDelegate {
       child: Column(
         children: <Widget>[
           SizedBox(height: 30),
-          CardGruop(),
-          SizedBox(height: 30),
-          CardGruop(),
+          //CardGruop(),
+          //SizedBox(height: 30),
+          //CardGruop(),
         ],
       ),
     );

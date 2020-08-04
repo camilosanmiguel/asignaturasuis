@@ -2,9 +2,9 @@ import 'package:cupos_uis/src/models/curso.dart';
 import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:flutter/material.dart';
 
-class CardGruop extends StatelessWidget {
+class CardGroup extends StatelessWidget {
   final Curso curso;
-  CardGruop({@required this.curso});
+  CardGroup({@required this.curso});
 
   @override
   Widget build(BuildContext context) {

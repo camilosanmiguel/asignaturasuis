@@ -1,11 +1,16 @@
 import 'package:cupos_uis/src/models/horario.dart';
+import 'package:flutter/widgets.dart';
 
 class Grupo {
   final String nombreGrupo;
   final int capacidad, matriculados;
   final List<Horario> horarios;
 
-  Grupo({this.nombreGrupo, this.capacidad, this.matriculados, this.horarios});
+  Grupo(
+      {@required this.nombreGrupo,
+      @required this.matriculados,
+      @required this.capacidad,
+      @required this.horarios});
 
   Grupo.fromJson(Map<String, dynamic> parsedJson)
       : nombreGrupo = parsedJson['nombreGrupo'],

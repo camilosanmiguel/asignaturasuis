@@ -41,27 +41,31 @@ class Buscar extends StatelessWidget {
                 color: Color(0xff9E9E9E),
               ),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-              child: Icon(
-                Icons.search,
-                size: 20,
-                color: Color(0xffD7D7D7),
-              ),
-              decoration: BoxDecoration(
-                color: Color(0xffFE7D7D),
-                borderRadius: BorderRadius.circular(5),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
-                      spreadRadius: 0,
-                      blurRadius: 5,
-                      offset: Offset(0, 5))
-                ],
-              ),
-            )
+            iconoBuscar()
           ],
         ),
+      ),
+    );
+  }
+
+  Widget iconoBuscar() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+      child: Icon(
+        Icons.search,
+        size: 20,
+        color: Color(0xffD7D7D7),
+      ),
+      decoration: BoxDecoration(
+        color: Color(0xffFE7D7D),
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              spreadRadius: 0,
+              blurRadius: 5,
+              offset: Offset(0, 5))
+        ],
       ),
     );
   }

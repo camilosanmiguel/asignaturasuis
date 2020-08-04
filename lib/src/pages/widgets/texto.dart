@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TextoHome extends StatelessWidget {
-  const TextoHome({
+class Texto extends StatelessWidget {
+  const Texto({
     Key key,
   }) : super(key: key);
 

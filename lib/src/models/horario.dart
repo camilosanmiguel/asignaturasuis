@@ -1,7 +1,13 @@
+import 'package:flutter/widgets.dart';
+
 class Horario {
   final String dia, hora, edificio, profesor;
 
-  Horario({this.dia, this.hora, this.edificio, this.profesor});
+  Horario(
+      {@required this.dia,
+      @required this.hora,
+      @required this.edificio,
+      @required this.profesor});
 
   Horario.fromJson(Map<String, dynamic> parsedJson)
       : dia = parsedJson['dia'],
