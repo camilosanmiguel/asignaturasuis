@@ -1,112 +1,38 @@
 import 'package:bloc/bloc.dart';
+import 'package:cupos_uis/src/cubit/time_cubit.dart';
 import 'package:cupos_uis/src/models/curso.dart';
-import 'package:cupos_uis/src/models/grupo.dart';
 
 class CursoCubit extends Cubit<List<Curso>> {
-  CursoCubit()
-      : super(
-          [
-            Curso(
-              nombre: "CALCULO",
-              codigo: 2160414,
-              grupos: [
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 30,
-                    matriculados: 30,
-                    horarios: []),
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 20,
-                    matriculados: 18,
-                    horarios: []),
-              ],
-            ),
-            Curso(
-              nombre: "CALCULO",
-              codigo: 2160414,
-              grupos: [
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 30,
-                    matriculados: 30,
-                    horarios: []),
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 20,
-                    matriculados: 18,
-                    horarios: []),
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 20,
-                    matriculados: 18,
-                    horarios: []),
-              ],
-            ),
-            Curso(
-              nombre: "CALCULO",
-              codigo: 2160414,
-              grupos: [
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 30,
-                    matriculados: 30,
-                    horarios: []),
-              ],
-            ),
-            Curso(
-              nombre: "CALCULO",
-              codigo: 2160414,
-              grupos: [
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 30,
-                    matriculados: 30,
-                    horarios: []),
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 20,
-                    matriculados: 18,
-                    horarios: []),
-              ],
-            ),
-            Curso(
-              nombre: "CALCULO",
-              codigo: 2160414,
-              grupos: [
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 30,
-                    matriculados: 30,
-                    horarios: []),
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 20,
-                    matriculados: 18,
-                    horarios: []),
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 20,
-                    matriculados: 18,
-                    horarios: []),
-              ],
-            ),
-            Curso(
-              nombre: "CALCULO",
-              codigo: 2160414,
-              grupos: [
-                Grupo(
-                    nombreGrupo: "B1",
-                    capacidad: 30,
-                    matriculados: 30,
-                    horarios: []),
-              ],
-            ),
-          ],
-        );
+  CursoCubit() : super([]);
 
-  /// When increment is called, the current state
-  /// of the cubit is accessed via `state` and
-  /// a new `state` is emitted via `emit`.
-  //void increment() => emit([Curso()]);
+  void update() {
+    //bajarShardPreferences
+    //realizarPeticionHTTP
+
+    //peticion fail
+    //no guarda envia el mismo
+    //tiempo el mismo
+
+    //peticion ok!
+    //GuardarShardPreferences
+    //emitirListaCursos
+
+    emit([]);
+    TimeCubit().reset();
+  }
+
+  void buscar(String hola) {
+    //bajarShardPreferences
+    //realizarPeticionHTTP
+    //crearListaCursos-cotejada con la guardada en el shard
+    //emitirListaCursos
+    print(hola);
+  }
+
+  void toggleFav(Curso curso) {
+    //bajarShardPreferences
+    //Añadir Curso o Eliminar
+    //guardarShardPreferences
+    //EmitirListaCursos
+  }
 }
