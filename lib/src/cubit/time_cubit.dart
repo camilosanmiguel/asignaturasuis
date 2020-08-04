@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TimeCubit extends Cubit<int> {
-  TimeCubit() : super(80);
+  TimeCubit() : super(1);
 
   void init(int time) => emit(time);
 
