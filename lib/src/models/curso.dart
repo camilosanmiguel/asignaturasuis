@@ -1,5 +1,5 @@
-import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:flutter/widgets.dart';
+import 'package:cupos_uis/src/models/grupo.dart';
 
 class Curso {
   final int codigo;
@@ -13,4 +13,10 @@ class Curso {
         nombre = parsedJson['nombre'],
         grupos =
             parsedJson['grupos'].map((data) => Grupo.fromJson(data)).toList();
+
+  Map<String, dynamic> toJson() => {
+        'codigo': codigo,
+        'nombre': nombre,
+        'grupos': grupos.map((grupo) => grupo.toJson()).toList()
+      };
 }

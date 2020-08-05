@@ -14,4 +14,7 @@ class Horario {
         hora = parsedJson['hora'],
         edificio = parsedJson['edificio'],
         profesor = parsedJson['profesor'];
+
+  Map<String, dynamic> toJson() =>
+      {'dia': dia, 'hora': hora, 'edificio': edificio, 'profesor': profesor};
 }

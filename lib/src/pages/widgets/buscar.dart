@@ -1,5 +1,7 @@
+import 'package:cupos_uis/src/cubit/curso_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:cupos_uis/src/search/search_delegate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Buscar extends StatelessWidget {
   const Buscar({
@@ -9,11 +11,15 @@ class Buscar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // onTap: () {
+      //   showSearch(
+      //     context: context,
+      //     delegate: GrupoSearch(hintText: "Busca Un Grupo"),
+      //   );
+      // },
       onTap: () {
-        showSearch(
-          context: context,
-          delegate: GrupoSearch(hintText: "Busca Un Grupo"),
-        );
+        var cubit = BlocProvider.of<CursoCubit>(context);
+        cubit.update();
       },
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
