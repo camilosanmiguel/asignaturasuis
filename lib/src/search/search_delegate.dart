@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cupos_uis/src/cubit/curso_cubit.dart';
+import 'package:cupos_uis/src/pages/home/widgets/body.dart';
+import 'package:cupos_uis/src/pages/home/widgets/subheader.dart';
 
 class GrupoSearch extends SearchDelegate {
   GrupoSearch({@required String hintText})
@@ -18,7 +22,10 @@ class GrupoSearch extends SearchDelegate {
           child: Icon(
             Icons.clear,
           ),
-          onTap: () => query = '',
+          onTap: () {
+            query = '';
+            showSuggestions(context);
+          },
         ),
       ),
     ];
@@ -38,20 +45,44 @@ class GrupoSearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 30),
-          //CardGruop(),
-          //SizedBox(height: 30),
-          //CardGruop(),
-        ],
-      ),
+    var cubit = BlocProvider.of<CursoCubit>(context);
+    cubit.buscar(query);
+    return BlocBuilder(
+      cubit: cubit,
+      builder: (context, state) {
+        if (state.isEmpty) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return Padding(
+            padding: EdgeInsets.only(top: 3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                SubHeader(),
+                Body(),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container();
+    final lista = ["24948", "23427", "23423", "22979"];
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        leading: Icon(Icons.assignment),
+        title: Text(lista[index]),
+        onTap: () {
+          query = lista[index];
+          showResults(context);
+        },
+      ),
+      itemCount: lista.length,
+    );
   }
 }

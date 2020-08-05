@@ -4,11 +4,13 @@ import 'package:cupos_uis/src/cubit/time_cubit.dart';
 import 'package:cupos_uis/src/models/curso.dart';
 import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:cupos_uis/src/utils/preferencias.dart';
+import 'package:cupos_uis/src/utils/provider_http.dart';
 
 class CursoCubit extends Cubit<List<Curso>> {
   CursoCubit() : super([]);
 
   Future<void> update() async {
+    ProviderHttp().init();
     List<Curso> cursos = await _getCursos();
     if (cursos.isNotEmpty) {
       //TODO realizarPeticionHTTPConListaCursos
@@ -19,11 +21,15 @@ class CursoCubit extends Cubit<List<Curso>> {
     }
   }
 
-  Future<void> buscar(String hola) async {
-    List<Curso> cursos = await _getCursos();
-    //TODO realizarPeticionHTTPConUnString
+  Future<void> buscar(String query) async {
+    //print(query);
+    ProviderHttp().init();
+    TimeCubit().init(-1);
+    emit([]);
+    //List<Curso> cursos = await _getCursos();
     //TODO crearListaCursos-cotejada con la guardada en el shard
-    emit(cursos);
+    List<Curso> cursosHttp = await ProviderHttp().getCursosByString(query);
+    emit(cursosHttp);
     TimeCubit().reset();
   }
 
@@ -48,6 +54,8 @@ class CursoCubit extends Cubit<List<Curso>> {
     }
 
     Preferencias().cursos = json.encode(cursos);
+    List<Curso> cursosStatus = state;
+
     emit(cursos);
   }
 

@@ -11,16 +11,16 @@ class Buscar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () {
-      //   showSearch(
-      //     context: context,
-      //     delegate: GrupoSearch(hintText: "Busca Un Grupo"),
-      //   );
-      // },
       onTap: () {
-        var cubit = BlocProvider.of<CursoCubit>(context);
-        cubit.update();
+        showSearch(
+          context: context,
+          delegate: GrupoSearch(hintText: "Busca Grupo"),
+        );
       },
+      // onTap: () {
+      //   var cubit = BlocProvider.of<CursoCubit>(context);
+      //   cubit.buscar("hola");
+      // },
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         alignment: Alignment.centerLeft,
