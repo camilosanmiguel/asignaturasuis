@@ -13,27 +13,27 @@ class CursoCubit extends Cubit<List<Curso>> {
     ProviderHttp().init();
     List<Curso> cursos = await _getCursos();
     if (cursos.isNotEmpty) {
-      //TODO realizarPeticionHTTPConListaCursos
-      Preferencias().cursos = json.encode(cursos);
+      List<Curso> cursosHttp = await ProviderHttp().getCursos(cursos);
+      Preferencias().cursos = json.encode(cursosHttp);
       Preferencias().tiempo = 0;
-      emit(cursos);
+      emit(cursosHttp);
       TimeCubit().reset();
     }
   }
 
   Future<void> buscar(String query) async {
-    //print(query);
     ProviderHttp().init();
     TimeCubit().init(-1);
     emit([]);
     //List<Curso> cursos = await _getCursos();
-    //TODO crearListaCursos-cotejada con la guardada en el shard
     List<Curso> cursosHttp = await ProviderHttp().getCursosByString(query);
+    //TODO crearListaCursos-cotejada con la guardada en el shard
     emit(cursosHttp);
     TimeCubit().reset();
   }
 
   Future<void> toggleFav(Curso curso) async {
+    //TODO REVISAR TOGGLEFAV
     List<Curso> cursos = await _getCursos();
 
     for (Curso cur in cursos) {
@@ -54,7 +54,7 @@ class CursoCubit extends Cubit<List<Curso>> {
     }
 
     Preferencias().cursos = json.encode(cursos);
-    List<Curso> cursosStatus = state;
+    //List<Curso> cursosStatus = state;
 
     emit(cursos);
   }

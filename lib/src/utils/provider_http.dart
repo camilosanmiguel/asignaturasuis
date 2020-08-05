@@ -27,7 +27,7 @@ class ProviderHttp {
     String nombre = '';
 
     try {
-      int cod = int.parse(query);
+      int.parse(query);
       codigo = query;
     } catch (e) {
       nombre = query;
@@ -73,10 +73,10 @@ class ProviderHttp {
   }
 
   Future<List<Curso>> getCursos(List<Curso> cursos) async {
-    final response = await _dio.post(
-        'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
-        data: {"nombre": "", "codigo": "", "parametro": "2"},
-        options: Options(contentType: Headers.formUrlEncodedContentType));
+    // final response = await _dio.post(
+    //     'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
+    //     data: {"nombre": "", "codigo": "", "parametro": "2"},
+    //     options: Options(contentType: Headers.formUrlEncodedContentType));
     return [];
   }
 }
