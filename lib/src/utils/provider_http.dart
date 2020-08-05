@@ -2,6 +2,7 @@ import 'package:cupos_uis/src/models/curso.dart';
 import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:cupos_uis/src/models/horario.dart';
 import 'package:dio/dio.dart';
+import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
 class ProviderHttp {
@@ -24,6 +25,7 @@ class ProviderHttp {
   Future<List<Curso>> getCursosByString(String query) async {
     String codigo = '';
     String nombre = '';
+
     try {
       int cod = int.parse(query);
       codigo = query;
@@ -36,10 +38,37 @@ class ProviderHttp {
         data: {"nombre": "$nombre", "codigo": "$codigo", "parametro": "2"},
         options: Options(contentType: Headers.formUrlEncodedContentType));
 
-    //TODO ACA Vamos, Falta terminar de parsear la respuesta en modelos de cursos
     var document = parse(response.data);
-    print(document.getElementsByTagName('table'));
+    var tablas = document.getElementsByClassName('tabla');
 
+    List<Curso> cursosHttp = [];
+
+    for (Element tabla in tablas) {
+      var filas = tabla.getElementsByTagName("tr");
+
+      var nombre = filas[0].getElementsByTagName("td")[0].text.trim();
+      var codigo = filas[0]
+          .getElementsByTagName("td")[1]
+          .text
+          .split(':')[1]
+          .replaceAll(new RegExp(r"\s+"), "");
+      var nombregrupo = filas[1]
+          .getElementsByTagName("td")
+          .first
+          .text
+          .split(':')[1]
+          .replaceAll(new RegExp(r"\s+"), "");
+      var capacidad = filas[2]
+          .getElementsByTagName("td")[0]
+          .text
+          .split(':')[1]
+          .replaceAll(new RegExp(r"\s+"), "");
+      var matriculados = filas[2]
+          .getElementsByTagName("td")[1]
+          .text
+          .split(':')[1]
+          .replaceAll(new RegExp(r"\s+"), "");
+    }
     return [];
   }
 
