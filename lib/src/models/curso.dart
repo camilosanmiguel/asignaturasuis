@@ -15,6 +15,11 @@ class Curso {
             .map((grupo) => Grupo.fromJson(grupo))
             .toList();
 
+  Curso.clone(Curso curso)
+      : codigo = curso.codigo,
+        nombre = curso.nombre,
+        grupos = curso.grupos.map((grupo) => Grupo.clone(grupo)).toList();
+
   Map<String, dynamic> toJson() => {
         'codigo': codigo,
         'nombre': nombre,

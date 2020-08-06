@@ -15,6 +15,12 @@ class Horario {
         edificio = parsedJson['edificio'],
         profesor = parsedJson['profesor'];
 
+  Horario.clone(Horario horario)
+      : dia = horario.dia,
+        hora = horario.hora,
+        edificio = horario.edificio,
+        profesor = horario.profesor;
+
   Map<String, dynamic> toJson() =>
       {'dia': dia, 'hora': hora, 'edificio': edificio, 'profesor': profesor};
 }

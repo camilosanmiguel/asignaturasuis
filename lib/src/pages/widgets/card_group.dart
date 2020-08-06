@@ -88,7 +88,7 @@ class CardGroup extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           onTap: () {
             var cubit = BlocProvider.of<CursoCubit>(context);
-            cubit.toggleFav(cursoToggle: curso);
+            cubit.toggleFav(cursoToggle: Curso.clone(curso));
           },
           child: Icon(
             Icons.favorite,

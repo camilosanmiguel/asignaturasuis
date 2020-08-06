@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:cupos_uis/src/cubit/time_cubit.dart';
 import 'package:cupos_uis/src/models/curso.dart';
+import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:cupos_uis/src/utils/preferencias.dart';
 import 'package:cupos_uis/src/utils/provider_http.dart';
 
@@ -48,39 +49,52 @@ class CursoCubit extends Cubit<List<Curso>> {
   }
 
   Future<void> toggleFav({Curso cursoToggle}) async {
-    //TODO PINCHI TOGGLE NO FUNCIONA BIEN :()
     List<Curso> cursos = await _getCursos();
-    if (cursos.isEmpty) {
-      cursos.add(cursoToggle);
+    if (json.encode(cursos) == json.encode(state)) {
+      print("entra aca!!!!");
+      cursos.remove(cursoToggle);
+      Preferencias().cursos = json.encode(cursos);
     } else {
-      bool agregado = false;
+      if (cursos.isEmpty) {
+        cursoToggle.grupos[0].fav = true;
+        cursos.add(cursoToggle);
+      } else {
+        bool agregado = false;
+        bool eliminar = false;
+        cursos.forEach((curso) {
+          if (curso.codigo == cursoToggle.codigo) {
+            curso.grupos.forEach((grupo) {
+              if (grupo.nombreGrupo == cursoToggle.grupos[0].nombreGrupo) {
+                eliminar = true;
+              }
+            });
+            if (eliminar) {
+              curso.grupos.remove(cursoToggle.grupos[0]);
+            } else {
+              cursoToggle.grupos[0].fav = true;
+              curso.grupos.add(cursoToggle.grupos[0]);
+              agregado = true;
+            }
+          }
+        });
+        if (!agregado && !eliminar) {
+          cursoToggle.grupos[0].fav = true;
+          cursos.add(cursoToggle);
+        }
+      }
+      Preferencias().cursos = json.encode(cursos);
+      cursos.clear();
+      cursos.addAll(state);
       cursos.forEach((curso) {
         if (curso.codigo == cursoToggle.codigo) {
           curso.grupos.forEach((grupo) {
             if (grupo.nombreGrupo == cursoToggle.grupos[0].nombreGrupo) {
               grupo.fav = !grupo.fav;
-              agregado = true;
             }
           });
         }
       });
-      if (!agregado) {
-        cursos.add(cursoToggle);
-      }
     }
-    Preferencias().cursos = json.encode(cursos);
-
-    cursos.clear();
-    cursos.addAll(state);
-    cursos.forEach((curso) {
-      if (curso.codigo == cursoToggle.codigo) {
-        curso.grupos.forEach((grupo) {
-          if (grupo.nombreGrupo == cursoToggle.grupos[0].nombreGrupo) {
-            grupo.fav = !grupo.fav;
-          }
-        });
-      }
-    });
     emit(cursos);
   }
 

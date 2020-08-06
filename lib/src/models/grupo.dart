@@ -23,6 +23,14 @@ class Grupo {
             .map((horario) => Horario.fromJson(horario))
             .toList();
 
+  Grupo.clone(Grupo grupo)
+      : fav = grupo.fav,
+        nombreGrupo = grupo.nombreGrupo,
+        capacidad = grupo.capacidad,
+        matriculados = grupo.matriculados,
+        horarios =
+            grupo.horarios.map((horario) => Horario.clone(horario)).toList();
+
   Map<String, dynamic> toJson() => {
         'fav': fav,
         'nombreGrupo': nombreGrupo,
