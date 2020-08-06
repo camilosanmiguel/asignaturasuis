@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cupos_uis/src/cubit/curso_cubit.dart';
+import 'package:cupos_uis/src/cubit/search_cubit.dart';
 import 'package:cupos_uis/src/pages/home/widgets/body.dart';
 import 'package:cupos_uis/src/pages/home/widgets/subheader.dart';
 
@@ -39,6 +40,7 @@ class GrupoSearch extends SearchDelegate {
         borderRadius: BorderRadius.circular(20),
         onTap: () {
           var cubit = BlocProvider.of<CursoCubit>(context);
+          SearchCubit().setFalse();
           cubit.update();
           Navigator.of(context).pop();
         },
@@ -51,6 +53,7 @@ class GrupoSearch extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     var cubit = BlocProvider.of<CursoCubit>(context);
     cubit.buscar(query);
+    SearchCubit().setTrue();
     return BlocBuilder(
       cubit: cubit,
       builder: (context, state) {

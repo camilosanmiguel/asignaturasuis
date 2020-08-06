@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -124,45 +126,53 @@ class ProviderHttp {
   }
 
   Future<List<Curso>> getCursos(List<Curso> cursos) async {
-    cursos.forEach(
-      (curso) async {
-        final response = await _dio.post(
-            'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
-            data: {"nombre": "", "codigo": "${curso.codigo}", "parametro": "2"},
-            options: Options(contentType: Headers.formUrlEncodedContentType));
+    print("cursos que llegan al get cursos");
+    print(json.encode(cursos));
 
-        var document = parse(response.data);
-        var tablas = document.getElementsByClassName('tabla');
+    List codigos = cursos.map((curso) => curso.codigo).toList();
+    for (int codigo in codigos) {
+      final response = await _dio.post(
+          'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
+          data: {"nombre": "", "codigo": "$codigo", "parametro": "2"},
+          options: Options(contentType: Headers.formUrlEncodedContentType));
+      var document = parse(response.data);
+      var tablas = document.getElementsByClassName('tabla');
+      for (Element tabla in tablas) {
+        var filas = tabla.getElementsByTagName("tr");
 
-        for (Element tabla in tablas) {
-          var filas = tabla.getElementsByTagName("tr");
+        var nombregrupo = filas[1]
+            .getElementsByTagName("td")
+            .first
+            .text
+            .split(':')[1]
+            .replaceAll(new RegExp(r"\s+"), "");
 
-          var nombregrupo = filas[1]
-              .getElementsByTagName("td")
-              .first
-              .text
-              .split(':')[1]
-              .replaceAll(new RegExp(r"\s+"), "");
-          var capacidad = filas[2]
-              .getElementsByTagName("td")[0]
-              .text
-              .split(':')[1]
-              .replaceAll(new RegExp(r"\s+"), "");
-          var matriculados = filas[2]
-              .getElementsByTagName("td")[1]
-              .text
-              .split(':')[1]
-              .replaceAll(new RegExp(r"\s+"), "");
+        var capacidad = filas[2]
+            .getElementsByTagName("td")[0]
+            .text
+            .split(':')[1]
+            .replaceAll(new RegExp(r"\s+"), "");
 
-          curso.grupos.forEach((grupo) {
-            if (grupo.nombreGrupo == nombregrupo) {
-              grupo.capacidad = int.parse(capacidad);
-              grupo.matriculados = int.parse(matriculados);
-            }
-          });
-        }
-      },
-    );
+        var matriculados = filas[2]
+            .getElementsByTagName("td")[1]
+            .text
+            .split(':')[1]
+            .replaceAll(new RegExp(r"\s+"), "");
+
+        cursos.forEach((curso) {
+          if (curso.codigo == codigo) {
+            curso.grupos.forEach((grupo) {
+              if (grupo.nombreGrupo == nombregrupo) {
+                grupo.capacidad = int.parse(capacidad);
+                print("matriculados $matriculados");
+                grupo.matriculados = int.parse(matriculados);
+                print("grupo.matriculados ${grupo.matriculados}");
+              }
+            });
+          }
+        });
+      }
+    }
     return cursos;
   }
 }

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
+import 'package:cupos_uis/src/cubit/search_cubit.dart';
 import 'package:cupos_uis/src/cubit/time_cubit.dart';
 import 'package:cupos_uis/src/models/curso.dart';
-import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:cupos_uis/src/utils/preferencias.dart';
 import 'package:cupos_uis/src/utils/provider_http.dart';
 
@@ -12,13 +12,14 @@ class CursoCubit extends Cubit<List<Curso>> {
   Future<void> update() async {
     ProviderHttp().init();
     List<Curso> cursos = await _getCursos();
+    TimeCubit().init(Preferencias().tiempo);
     if (cursos.isNotEmpty) {
-      List<Curso> cursosHttp = await ProviderHttp().getCursos(cursos);
-      //Preferencias().cursos = json.encode(cursosHttp);
-      Preferencias().tiempo = 0;
-      emit(cursosHttp);
+      cursos = await ProviderHttp().getCursos(cursos);
+      Preferencias().cursos = json.encode(cursos);
+      print(DateTime.now());
       TimeCubit().reset();
     }
+    emit(cursos);
   }
 
   Future<void> buscar(String query) async {
@@ -43,48 +44,14 @@ class CursoCubit extends Cubit<List<Curso>> {
         });
       });
     }
-
     emit(cursosHttp);
     TimeCubit().reset();
   }
 
   Future<void> toggleFav({Curso cursoToggle}) async {
-    List<Curso> cursos = await _getCursos();
-    if (json.encode(cursos) == json.encode(state)) {
-      print("entra aca!!!!");
-      cursos.remove(cursoToggle);
-      Preferencias().cursos = json.encode(cursos);
-    } else {
-      if (cursos.isEmpty) {
-        cursoToggle.grupos[0].fav = true;
-        cursos.add(cursoToggle);
-      } else {
-        bool agregado = false;
-        bool eliminar = false;
-        cursos.forEach((curso) {
-          if (curso.codigo == cursoToggle.codigo) {
-            curso.grupos.forEach((grupo) {
-              if (grupo.nombreGrupo == cursoToggle.grupos[0].nombreGrupo) {
-                eliminar = true;
-              }
-            });
-            if (eliminar) {
-              curso.grupos.remove(cursoToggle.grupos[0]);
-            } else {
-              cursoToggle.grupos[0].fav = true;
-              curso.grupos.add(cursoToggle.grupos[0]);
-              agregado = true;
-            }
-          }
-        });
-        if (!agregado && !eliminar) {
-          cursoToggle.grupos[0].fav = true;
-          cursos.add(cursoToggle);
-        }
-      }
-      Preferencias().cursos = json.encode(cursos);
-      cursos.clear();
-      cursos.addAll(state);
+    if (SearchCubit().state) {
+      await _toggleShared(cursoToggle);
+      List<Curso> cursos = []..addAll(state);
       cursos.forEach((curso) {
         if (curso.codigo == cursoToggle.codigo) {
           curso.grupos.forEach((grupo) {
@@ -94,8 +61,44 @@ class CursoCubit extends Cubit<List<Curso>> {
           });
         }
       });
+      emit(cursos);
+    } else {
+      await _toggleShared(cursoToggle);
+      update();
     }
-    emit(cursos);
+  }
+
+  Future<void> _toggleShared(Curso cursoToggle) async {
+    List<Curso> cursos = await _getCursos();
+    int indexCurso = -1;
+    int indexGrupo;
+    cursos.forEach((curso) {
+      if (curso.codigo == cursoToggle.codigo) {
+        indexCurso = cursos.indexOf(curso);
+        curso.grupos.forEach((grupo) {
+          if (grupo.nombreGrupo == cursoToggle.grupos[0].nombreGrupo) {
+            indexGrupo = curso.grupos.indexOf(grupo);
+          }
+        });
+      }
+    });
+
+    if (cursoToggle.grupos[0].fav) {
+      if (cursos[indexCurso].grupos.length > 1) {
+        cursos[indexCurso].grupos.removeAt(indexGrupo);
+      } else {
+        cursos.removeAt(indexCurso);
+      }
+    } else {
+      if (indexCurso != -1) {
+        cursoToggle.grupos[0].fav = true;
+        cursos[indexCurso].grupos.add(cursoToggle.grupos[0]);
+      } else {
+        cursoToggle.grupos[0].fav = true;
+        cursos.add(cursoToggle);
+      }
+    }
+    Preferencias().cursos = json.encode(cursos);
   }
 
   Future<List<Curso>> _getCursos() async {
