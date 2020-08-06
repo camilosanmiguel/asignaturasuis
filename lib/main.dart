@@ -9,6 +9,7 @@ void main() {
 
 //TODO AGREGAR ICONO Y SPLASH SCREEN
 //TODO HACER RESPONSIVO TODO EL DISEÑO
+//TODO CREAR WIDGET FLOTANTE DE HORARIOS
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
