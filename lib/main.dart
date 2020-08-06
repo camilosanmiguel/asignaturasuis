@@ -7,6 +7,8 @@ void main() {
   runApp(MyApp());
 }
 
+//TODO AGREGAR ICONO Y SPLASH SCREEN
+//TODO HACER RESPONSIVO TODO EL DISEÑO
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
