@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 class Grupo {
   bool fav;
   final String nombreGrupo;
-  final int capacidad, matriculados;
-  final List<Horario> horarios;
+  int capacidad, matriculados;
+  List<Horario> horarios;
 
   Grupo(
       {@required this.fav,
