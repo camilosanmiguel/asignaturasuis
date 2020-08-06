@@ -1,6 +1,8 @@
+import 'package:cupos_uis/src/cubit/curso_cubit.dart';
 import 'package:cupos_uis/src/models/curso.dart';
 import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardGroup extends StatelessWidget {
   final Curso curso;
@@ -27,7 +29,15 @@ class CardGroup extends StatelessWidget {
           headerCard(),
           for (Grupo grupo in curso.grupos)
             Column(
-              children: <Widget>[linea(), bodyCard(grupo: grupo)],
+              children: <Widget>[
+                linea(),
+                bodyCard(
+                    curso: Curso(
+                        codigo: curso.codigo,
+                        nombre: curso.nombre,
+                        grupos: [grupo]),
+                    context: context)
+              ],
             )
         ],
       ),
@@ -69,47 +79,56 @@ class CardGroup extends StatelessWidget {
     );
   }
 
-  Widget bodyCard({Grupo grupo}) {
+  Widget bodyCard({Curso curso, BuildContext context}) {
+    //TODO HACER TOUCHABLE TODO Y LANZAR HORARIOS
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                InkWell(
-                  borderRadius: BorderRadius.circular(20),
-                  onTap: () {},
-                  child: Icon(
-                    Icons.favorite,
-                    color: Color(0xffFE7D7D),
-                    //color: Colors.transparent,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    grupo.nombreGrupo,
+        InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () {
+            var cubit = BlocProvider.of<CursoCubit>(context);
+            cubit.toggleFav(cursoToggle: curso);
+          },
+          child: Icon(
+            Icons.favorite,
+            //color: Color(0xffFE7D7D),
+            color: curso.grupos[0].fav ? Color(0xffFE7D7D) : Colors.grey,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    curso.grupos[0].nombreGrupo,
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
-                ),
-              ],
-            ),
-            Text(
-              "MANUEL FELIPE CERPA TORRES",
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.italic,
+                ],
               ),
-            ),
-          ],
+              Text(
+                "MANUEL FELIPE CERPA TORRES",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
         ),
-        Text(
-          "${grupo.matriculados}/${grupo.capacidad}",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
+        Expanded(
+          child: Text(
+            "${curso.grupos[0].matriculados}/${curso.grupos[0].capacidad}",
+            textAlign: TextAlign.right,
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: curso.grupos[0].matriculados < curso.grupos[0].capacidad
+                    ? Color(0xff8BC34A)
+                    : Color(0xffFE7D7D)),
           ),
         ),
       ],

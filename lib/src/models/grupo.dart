@@ -19,8 +19,8 @@ class Grupo {
         nombreGrupo = parsedJson['nombreGrupo'],
         capacidad = parsedJson['capacidad'],
         matriculados = parsedJson['matriculados'],
-        horarios = parsedJson['horarios']
-            .map((data) => Horario.fromJson(data))
+        horarios = (parsedJson['horarios'] as List)
+            .map((horario) => Horario.fromJson(horario))
             .toList();
 
   Map<String, dynamic> toJson() => {

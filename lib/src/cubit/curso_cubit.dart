@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:cupos_uis/src/cubit/time_cubit.dart';
 import 'package:cupos_uis/src/models/curso.dart';
-import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:cupos_uis/src/utils/preferencias.dart';
 import 'package:cupos_uis/src/utils/provider_http.dart';
 
@@ -14,7 +13,7 @@ class CursoCubit extends Cubit<List<Curso>> {
     List<Curso> cursos = await _getCursos();
     if (cursos.isNotEmpty) {
       List<Curso> cursosHttp = await ProviderHttp().getCursos(cursos);
-      Preferencias().cursos = json.encode(cursosHttp);
+      //Preferencias().cursos = json.encode(cursosHttp);
       Preferencias().tiempo = 0;
       emit(cursosHttp);
       TimeCubit().reset();
@@ -25,37 +24,63 @@ class CursoCubit extends Cubit<List<Curso>> {
     ProviderHttp().init();
     TimeCubit().init(-1);
     emit([]);
-    //List<Curso> cursos = await _getCursos();
+
+    List<Curso> cursos = await _getCursos();
     List<Curso> cursosHttp = await ProviderHttp().getCursosByString(query);
-    //TODO crearListaCursos-cotejada con la guardada en el shard
+    if (cursos.isNotEmpty) {
+      cursosHttp.forEach((cursoHttp) {
+        cursos.forEach((cursoShared) {
+          if (cursoHttp.codigo == cursoShared.codigo) {
+            cursoHttp.grupos.forEach((grupoHttp) {
+              cursoShared.grupos.forEach((grupoShared) {
+                if (grupoShared.nombreGrupo == grupoHttp.nombreGrupo) {
+                  grupoHttp.fav = grupoShared.fav;
+                }
+              });
+            });
+          }
+        });
+      });
+    }
+
     emit(cursosHttp);
     TimeCubit().reset();
   }
 
-  Future<void> toggleFav(Curso curso) async {
-    //TODO REVISAR TOGGLEFAV
+  Future<void> toggleFav({Curso cursoToggle}) async {
+    //TODO PINCHI TOGGLE NO FUNCIONA BIEN :()
     List<Curso> cursos = await _getCursos();
-
-    for (Curso cur in cursos) {
-      if (cur.codigo == curso.codigo) {
-        for (Grupo gru in cur.grupos) {
-          if (gru.nombreGrupo == curso.grupos[0].nombreGrupo) {
-            cursos.remove(cur);
-            break;
-          } else {
-            cur.grupos.add(curso.grupos[0]);
-            break;
-          }
+    if (cursos.isEmpty) {
+      cursos.add(cursoToggle);
+    } else {
+      bool agregado = false;
+      cursos.forEach((curso) {
+        if (curso.codigo == cursoToggle.codigo) {
+          curso.grupos.forEach((grupo) {
+            if (grupo.nombreGrupo == cursoToggle.grupos[0].nombreGrupo) {
+              grupo.fav = !grupo.fav;
+              agregado = true;
+            }
+          });
         }
-      } else {
-        cursos.add(curso);
-        break;
+      });
+      if (!agregado) {
+        cursos.add(cursoToggle);
       }
     }
-
     Preferencias().cursos = json.encode(cursos);
-    //List<Curso> cursosStatus = state;
 
+    cursos.clear();
+    cursos.addAll(state);
+    cursos.forEach((curso) {
+      if (curso.codigo == cursoToggle.codigo) {
+        curso.grupos.forEach((grupo) {
+          if (grupo.nombreGrupo == cursoToggle.grupos[0].nombreGrupo) {
+            grupo.fav = !grupo.fav;
+          }
+        });
+      }
+    });
     emit(cursos);
   }
 

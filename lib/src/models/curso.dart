@@ -11,8 +11,9 @@ class Curso {
   Curso.fromJson(Map<String, dynamic> parsedJson)
       : codigo = parsedJson['codigo'],
         nombre = parsedJson['nombre'],
-        grupos =
-            parsedJson['grupos'].map((data) => Grupo.fromJson(data)).toList();
+        grupos = (parsedJson['grupos'] as List)
+            .map((grupo) => Grupo.fromJson(grupo))
+            .toList();
 
   Map<String, dynamic> toJson() => {
         'codigo': codigo,

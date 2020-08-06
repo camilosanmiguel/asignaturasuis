@@ -4,6 +4,7 @@ import 'package:html/parser.dart';
 import 'package:cupos_uis/src/models/curso.dart';
 import 'package:cupos_uis/src/models/grupo.dart';
 
+//TODO AGREGAR HORARIOS!!!!!
 class ProviderHttp {
   static final ProviderHttp _instance = ProviderHttp._ctor();
   factory ProviderHttp() {
@@ -22,7 +23,6 @@ class ProviderHttp {
   }
 
   Future<List<Curso>> getCursosByString(String query) async {
-    //TODO AGREGAR HORARIOS!!!!!
     String codigo = '';
     String nombre = '';
     String parametro = '';
@@ -157,7 +157,6 @@ class ProviderHttp {
             if (grupo.nombreGrupo == nombregrupo) {
               grupo.capacidad = int.parse(capacidad);
               grupo.matriculados = int.parse(matriculados);
-              //TODO AGREGAR HORARIOS
             }
           });
         }

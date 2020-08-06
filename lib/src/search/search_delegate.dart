@@ -37,7 +37,11 @@ class GrupoSearch extends SearchDelegate {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () => Navigator.of(context).pop(),
+        onTap: () {
+          var cubit = BlocProvider.of<CursoCubit>(context);
+          cubit.update();
+          Navigator.of(context).pop();
+        },
         child: Icon(Icons.arrow_back),
       ),
     );
