@@ -1,11 +1,11 @@
-import 'package:cupos_uis/src/models/curso.dart';
-import 'package:cupos_uis/src/models/grupo.dart';
-import 'package:cupos_uis/src/models/horario.dart';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
+import 'package:cupos_uis/src/models/curso.dart';
+import 'package:cupos_uis/src/models/grupo.dart';
 
 class ProviderHttp {
+  //TODO AGREGAR HORARIOS!!!!!
   static final ProviderHttp _instance = ProviderHttp._ctor();
   factory ProviderHttp() {
     return _instance;
@@ -25,17 +25,24 @@ class ProviderHttp {
   Future<List<Curso>> getCursosByString(String query) async {
     String codigo = '';
     String nombre = '';
+    String parametro = '';
 
     try {
       int.parse(query);
       codigo = query;
+      parametro = '2';
     } catch (e) {
       nombre = query;
+      parametro = '1';
     }
 
     final response = await _dio.post(
         'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
-        data: {"nombre": "$nombre", "codigo": "$codigo", "parametro": "2"},
+        data: {
+          "nombre": "$nombre",
+          "codigo": "$codigo",
+          "parametro": "$parametro"
+        },
         options: Options(contentType: Headers.formUrlEncodedContentType));
 
     var document = parse(response.data);
@@ -68,8 +75,51 @@ class ProviderHttp {
           .text
           .split(':')[1]
           .replaceAll(new RegExp(r"\s+"), "");
+
+      bool agregado = false;
+
+      if (cursosHttp.isNotEmpty) {
+        cursosHttp.forEach((element) {
+          if (element.codigo == int.parse(codigo)) {
+            element.grupos.add(
+              Grupo(
+                  fav: false,
+                  nombreGrupo: nombregrupo,
+                  matriculados: int.parse(matriculados),
+                  capacidad: int.parse(capacidad),
+                  horarios: []),
+            );
+            agregado = true;
+          }
+        });
+        if (!agregado) {
+          cursosHttp.add(
+            Curso(nombre: nombre, codigo: int.parse(codigo), grupos: [
+              Grupo(
+                fav: false,
+                nombreGrupo: nombregrupo,
+                matriculados: int.parse(matriculados),
+                capacidad: int.parse(capacidad),
+                horarios: [],
+              )
+            ]),
+          );
+        }
+      } else {
+        cursosHttp.add(
+          Curso(nombre: nombre, codigo: int.parse(codigo), grupos: [
+            Grupo(
+              fav: false,
+              nombreGrupo: nombregrupo,
+              matriculados: int.parse(matriculados),
+              capacidad: int.parse(capacidad),
+              horarios: [],
+            )
+          ]),
+        );
+      }
     }
-    return [];
+    return cursosHttp;
   }
 
   Future<List<Curso>> getCursos(List<Curso> cursos) async {
