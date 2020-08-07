@@ -1,3 +1,5 @@
+import 'package:cupos_uis/src/cubit/time_cubit.dart';
+import 'package:cupos_uis/src/pages/widgets/texto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cupos_uis/src/cubit/curso_cubit.dart';
@@ -58,7 +60,13 @@ class GrupoSearch extends SearchDelegate {
       cubit: cubit,
       builder: (context, state) {
         if (state.isEmpty) {
-          return Center(child: CircularProgressIndicator());
+          if (TimeCubit().state.isNegative) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return Texto(
+              texto: "No Se Han Encontrado Grupos",
+            );
+          }
         } else {
           return Padding(
             padding: EdgeInsets.only(top: 3),

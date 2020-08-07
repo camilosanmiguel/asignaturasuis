@@ -15,9 +15,10 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CursoCubit, List<Curso>>(
-      //cubit: CursoCubit(),
       builder: (_, cursos) => cursos.isEmpty
-          ? Texto()
+          ? Texto(
+              texto: "No Tienes Grupos \nGuardados Dale Click En\nBuscar Grupo",
+            )
           : Expanded(
               child: ListView.builder(
                 itemCount: cursos.length,

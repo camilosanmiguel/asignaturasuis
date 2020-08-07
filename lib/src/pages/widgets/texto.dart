@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Texto extends StatelessWidget {
-  const Texto({
-    Key key,
-  }) : super(key: key);
+  final String texto;
+  const Texto({Key key, this.texto}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Center(
         child: Text(
-          "No Tienes Grupos \nGuardados Dale Click En\nBuscar Grupo",
+          texto,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w600,

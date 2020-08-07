@@ -25,7 +25,6 @@ class ProviderHttp {
   }
 
   Future<List<Curso>> getCursosByString(String query) async {
-    //TODO BLINDAR EL STRING Y LA PETICION ANTE FALLAS
     String codigo = '';
     String nombre = '';
     String parametro = '';
