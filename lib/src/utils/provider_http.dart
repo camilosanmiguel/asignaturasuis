@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:cupos_uis/src/models/curso.dart';
 import 'package:cupos_uis/src/models/grupo.dart';
+import 'package:cupos_uis/src/models/horario.dart';
 
 //TODO AGREGAR HORARIOS!!!!!
 class ProviderHttp {
@@ -157,21 +157,35 @@ class ProviderHttp {
             .text
             .split(':')[1]
             .replaceAll(new RegExp(r"\s+"), "");
-
-        cursos.forEach((curso) {
+        //TODO SACARLO DEL FOREACH
+        print("inicio");
+        await cursos.forEach((curso) async {
           if (curso.codigo == codigo) {
-            curso.grupos.forEach((grupo) {
+            await curso.grupos.forEach((grupo) async {
               if (grupo.nombreGrupo == nombregrupo) {
                 grupo.capacidad = int.parse(capacidad);
-                print("matriculados $matriculados");
                 grupo.matriculados = int.parse(matriculados);
-                print("grupo.matriculados ${grupo.matriculados}");
+                grupo.horarios =
+                    await _getHorarios(codigo, nombregrupo, curso.nombre);
               }
             });
           }
         });
+        print("fin");
       }
     }
     return cursos;
+  }
+
+  Future<List<Horario>> _getHorarios(
+      int codigo, String nombreGrupo, String nombre) async {
+    List<Horario> horarios = [];
+    final response = await Dio().get(
+      'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombreGrupo&nombre=$nombre',
+    );
+    var document = parse(response.data);
+    var tablas = document.getElementsByClassName('tabla_letra12');
+    print(tablas);
+    return horarios;
   }
 }
