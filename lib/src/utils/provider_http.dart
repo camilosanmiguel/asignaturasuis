@@ -86,7 +86,8 @@ class ProviderHttp {
           print(e);
         }
 
-        int indexCurso = _getIndex(cursos: cursosHttp, codigo: codigo)[0];
+        int indexCurso = Curso.getIndex(cursos: cursosHttp, codigo: codigo)[0];
+
         Curso curso = Curso(nombre: nombre, codigo: int.parse(codigo), grupos: [
           Grupo(
             fav: false,
@@ -157,7 +158,7 @@ class ProviderHttp {
             print(e);
           }
 
-          List<int> index = _getIndex(
+          List<int> index = Curso.getIndex(
               cursos: cursos, codigo: codigo, nombregrupo: nombregrupo);
 
           cursos[index[0]].grupos[index[1]].capacidad = int.parse(capacidad);
@@ -208,21 +209,5 @@ class ProviderHttp {
         .replaceAll(new RegExp(r"\s+"), " ");
     String profesor = filas[3].getElementsByTagName("td")[1].text.trim();
     return [dia, hora, edificio, profesor];
-  }
-
-  List<int> _getIndex(
-      {List<Curso> cursos, String codigo, String nombregrupo = ''}) {
-    List<int> codigos = cursos.map((curso) => curso.codigo).toList();
-    List<int> index = [];
-    index.add(codigos.indexOf(int.parse(codigo)));
-    if (index[0] > 0) {
-      List<String> grupos =
-          cursos[index[0]].grupos.map((grupo) => grupo.nombreGrupo).toList();
-      index.add(grupos.indexOf(nombregrupo));
-    } else {
-      index.add(-1);
-    }
-
-    return index;
   }
 }

@@ -13,7 +13,7 @@ class Preferencias {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  get cursos {
+  String get cursos {
     return _prefs.getString('cursos') ?? '[]';
   }
 
@@ -21,7 +21,7 @@ class Preferencias {
     _prefs.setString('cursos', cursos);
   }
 
-  get tiempo {
+  String get tiempo {
     return _prefs.getString('tiempo') ?? '';
   }
 
