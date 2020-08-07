@@ -18,6 +18,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: 'Cupos Uis',
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            canvasColor: Colors.transparent,
+          ),
           home: HomePage()),
     );
   }

@@ -82,10 +82,55 @@ class CardGroup extends StatelessWidget {
   Widget bodyCard({Curso curso, BuildContext context}) {
     return InkWell(
       onTap: () {
+        //TODO Separar modal en metodo aparte!, y terminarlo
         showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
-              return Container();
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.35,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40))),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 20, bottom: 10, left: 20, right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text("20252"),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text("CALCULO I "),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text("GRUPO B1"),
+                    ),
+                    Column(
+                      children: curso.grupos[0].horarios.map((horario) {
+                        Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Text("Profesor: "),
+                                Text("pedrito perez")
+                              ],
+                            )
+                          ],
+                        );
+                      }).toList(),
+                    )
+                  ],
+                ),
+              );
             });
         print("se dio click en el grupo: ${curso.grupos[0].nombreGrupo}");
       },
