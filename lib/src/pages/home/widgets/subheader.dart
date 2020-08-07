@@ -5,19 +5,20 @@ import 'package:cupos_uis/src/cubit/time_cubit.dart';
 class SubHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TimeCubit, int>(
+    return BlocBuilder<TimeCubit, Duration>(
       cubit: TimeCubit(),
-      builder: (BuildContext context, int state) {
+      builder: (BuildContext context, Duration state) {
         String txt = '';
-        if (state > 86400) {
-          txt = "${state ~/ 86400} Dias";
-        } else if (state > 3600) {
-          txt = "${state ~/ 3600} Horas";
-        } else if (state > 60) {
-          txt = "${state ~/ 60} Minutos";
+        if (state.inDays != 0) {
+          txt = "${state.inDays} Dias";
+        } else if (state.inHours != 0) {
+          txt = "${state.inHours} Horas";
+        } else if (state.inMinutes != 0) {
+          txt = "${state.inMinutes} Minutos";
         } else {
-          txt = "$state Segundos";
+          txt = "${state.inSeconds} Segundos";
         }
+
         return state.isNegative
             ? Container()
             : Padding(

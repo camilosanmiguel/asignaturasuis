@@ -78,8 +78,8 @@ class GrupoSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    //CREAR LISTA DE CURSOS SUGERIDOS
     final lista = ["24948", "23427", "23423", "22979"];
-
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.assignment),

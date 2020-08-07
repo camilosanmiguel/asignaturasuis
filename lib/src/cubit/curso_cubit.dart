@@ -12,11 +12,19 @@ class CursoCubit extends Cubit<List<Curso>> {
   Future<void> update() async {
     ProviderHttp().init();
     List<Curso> cursos = await _getCursos();
-    TimeCubit().init(Preferencias().tiempo);
+
+    if (Preferencias().tiempo == '') {
+      TimeCubit().init(Duration(seconds: -1));
+    } else {
+      TimeCubit().init(
+        DateTime.parse(Preferencias().tiempo).difference(DateTime.now()),
+      );
+    }
+    emit(cursos);
+
     if (cursos.isNotEmpty) {
       cursos = await ProviderHttp().getCursos(cursos);
       Preferencias().cursos = json.encode(cursos);
-      print(DateTime.now());
       TimeCubit().reset();
     }
     emit(cursos);
@@ -24,7 +32,7 @@ class CursoCubit extends Cubit<List<Curso>> {
 
   Future<void> buscar(String query) async {
     ProviderHttp().init();
-    TimeCubit().init(-1);
+    TimeCubit().init(Duration(seconds: -1));
     emit([]);
 
     List<Curso> cursos = await _getCursos();
@@ -44,8 +52,8 @@ class CursoCubit extends Cubit<List<Curso>> {
         });
       });
     }
-    emit(cursosHttp);
     TimeCubit().reset();
+    emit(cursosHttp);
   }
 
   Future<void> toggleFav({Curso cursoToggle}) async {

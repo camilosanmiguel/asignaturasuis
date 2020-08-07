@@ -22,10 +22,10 @@ class Preferencias {
   }
 
   get tiempo {
-    return _prefs.getInt('tiempo') ?? -1;
+    return _prefs.getString('tiempo') ?? '';
   }
 
-  set tiempo(int tiempo) {
-    _prefs.setInt('tiempo', tiempo);
+  set tiempo(String tiempo) {
+    _prefs.setString('tiempo', tiempo);
   }
 }
