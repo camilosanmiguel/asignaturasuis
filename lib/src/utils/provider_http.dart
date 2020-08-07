@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -6,7 +5,6 @@ import 'package:cupos_uis/src/models/curso.dart';
 import 'package:cupos_uis/src/models/grupo.dart';
 import 'package:cupos_uis/src/models/horario.dart';
 
-//TODO AGREGAR HORARIOS!!!!!
 class ProviderHttp {
   static final ProviderHttp _instance = ProviderHttp._ctor();
   factory ProviderHttp() {
@@ -38,154 +36,193 @@ class ProviderHttp {
       parametro = '1';
     }
 
-    final response = await _dio.post(
-        'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
-        data: {
-          "nombre": "$nombre",
-          "codigo": "$codigo",
-          "parametro": "$parametro"
-        },
-        options: Options(contentType: Headers.formUrlEncodedContentType));
-
-    var document = parse(response.data);
-    var tablas = document.getElementsByClassName('tabla');
-
     List<Curso> cursosHttp = [];
 
-    for (Element tabla in tablas) {
-      var filas = tabla.getElementsByTagName("tr");
+    try {
+      Response response = await _dio.post(
+          'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
+          data: {
+            "nombre": "$nombre",
+            "codigo": "$codigo",
+            "parametro": "$parametro"
+          },
+          options: Options(contentType: Headers.formUrlEncodedContentType));
+      Document document = parse(response.data);
+      List<Element> tablas = document.getElementsByClassName('tabla');
 
-      var nombre = filas[0].getElementsByTagName("td")[0].text.trim();
-      var codigo = filas[0]
-          .getElementsByTagName("td")[1]
-          .text
-          .split(':')[1]
-          .replaceAll(new RegExp(r"\s+"), "");
-      var nombregrupo = filas[1]
-          .getElementsByTagName("td")
-          .first
-          .text
-          .split(':')[1]
-          .replaceAll(new RegExp(r"\s+"), "");
-      var capacidad = filas[2]
-          .getElementsByTagName("td")[0]
-          .text
-          .split(':')[1]
-          .replaceAll(new RegExp(r"\s+"), "");
-      var matriculados = filas[2]
-          .getElementsByTagName("td")[1]
-          .text
-          .split(':')[1]
-          .replaceAll(new RegExp(r"\s+"), "");
+      for (Element tabla in tablas) {
+        List<Element> filas = tabla.getElementsByTagName("tr");
+        List<String> datos = _scrapCursos(filas);
 
-      bool agregado = false;
+        String nombre = datos[0];
+        String codigo = datos[1];
+        String nombregrupo = datos[2];
+        String capacidad = datos[3];
+        String matriculados = datos[4];
 
-      if (cursosHttp.isNotEmpty) {
-        cursosHttp.forEach((element) {
-          if (element.codigo == int.parse(codigo)) {
-            element.grupos.add(
-              Grupo(
-                  fav: false,
-                  nombreGrupo: nombregrupo,
-                  matriculados: int.parse(matriculados),
-                  capacidad: int.parse(capacidad),
-                  horarios: []),
-            );
-            agregado = true;
-          }
-        });
-        if (!agregado) {
-          cursosHttp.add(
-            Curso(nombre: nombre, codigo: int.parse(codigo), grupos: [
-              Grupo(
-                fav: false,
-                nombreGrupo: nombregrupo,
-                matriculados: int.parse(matriculados),
-                capacidad: int.parse(capacidad),
-                horarios: [],
-              )
-            ]),
+        List<Horario> horarios = [];
+        try {
+          Response response = await Dio().get(
+            'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombregrupo&nombre=$nombre',
           );
+          Document document = parse(response.data);
+          List<Element> tablas =
+              document.getElementsByClassName('tabla_letra12');
+          tablas = tablas.getRange(1, tablas.length).toList();
+          for (Element tabla in tablas) {
+            List<Element> filas = tabla.getElementsByTagName("tr");
+            List<String> datos = _scrapHorarios(filas);
+
+            String dia = datos[0];
+            String hora = datos[1];
+            String edificio = datos[2];
+            String profesor = datos[3];
+
+            Horario horario = Horario(
+                dia: dia, hora: hora, edificio: edificio, profesor: profesor);
+            horarios.add(horario);
+          }
+        } catch (e) {
+          print(e);
         }
-      } else {
-        cursosHttp.add(
-          Curso(nombre: nombre, codigo: int.parse(codigo), grupos: [
-            Grupo(
-              fav: false,
-              nombreGrupo: nombregrupo,
-              matriculados: int.parse(matriculados),
-              capacidad: int.parse(capacidad),
-              horarios: [],
-            )
-          ]),
-        );
+
+        int indexCurso = _getIndex(cursos: cursosHttp, codigo: codigo)[0];
+        Curso curso = Curso(nombre: nombre, codigo: int.parse(codigo), grupos: [
+          Grupo(
+            fav: false,
+            nombreGrupo: nombregrupo,
+            matriculados: int.parse(matriculados),
+            capacidad: int.parse(capacidad),
+            horarios: horarios,
+          )
+        ]);
+
+        if (indexCurso > 0) {
+          cursosHttp[indexCurso].grupos.add(curso.grupos[0]);
+        } else {
+          cursosHttp.add(curso);
+        }
       }
+    } catch (e) {
+      print(e);
     }
     return cursosHttp;
   }
 
   Future<List<Curso>> getCursos(List<Curso> cursos) async {
-    print("cursos que llegan al get cursos");
-    print(json.encode(cursos));
-
     List codigos = cursos.map((curso) => curso.codigo).toList();
+
     for (int codigo in codigos) {
-      final response = await _dio.post(
-          'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
-          data: {"nombre": "", "codigo": "$codigo", "parametro": "2"},
-          options: Options(contentType: Headers.formUrlEncodedContentType));
-      var document = parse(response.data);
-      var tablas = document.getElementsByClassName('tabla');
-      for (Element tabla in tablas) {
-        var filas = tabla.getElementsByTagName("tr");
+      try {
+        Response response = await _dio.post(
+            'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
+            data: {"nombre": "", "codigo": "$codigo", "parametro": "2"},
+            options: Options(contentType: Headers.formUrlEncodedContentType));
+        Document document = parse(response.data);
+        List<Element> tablas = document.getElementsByClassName('tabla');
 
-        var nombregrupo = filas[1]
-            .getElementsByTagName("td")
-            .first
-            .text
-            .split(':')[1]
-            .replaceAll(new RegExp(r"\s+"), "");
+        for (Element tabla in tablas) {
+          List<Element> filas = tabla.getElementsByTagName("tr");
+          List<String> datos = _scrapCursos(filas);
 
-        var capacidad = filas[2]
-            .getElementsByTagName("td")[0]
-            .text
-            .split(':')[1]
-            .replaceAll(new RegExp(r"\s+"), "");
+          String nombre = datos[0];
+          String codigo = datos[1];
+          String nombregrupo = datos[2];
+          String capacidad = datos[3];
+          String matriculados = datos[4];
 
-        var matriculados = filas[2]
-            .getElementsByTagName("td")[1]
-            .text
-            .split(':')[1]
-            .replaceAll(new RegExp(r"\s+"), "");
-        //TODO SACARLO DEL FOREACH
-        print("inicio");
-        await cursos.forEach((curso) async {
-          if (curso.codigo == codigo) {
-            await curso.grupos.forEach((grupo) async {
-              if (grupo.nombreGrupo == nombregrupo) {
-                grupo.capacidad = int.parse(capacidad);
-                grupo.matriculados = int.parse(matriculados);
-                grupo.horarios =
-                    await _getHorarios(codigo, nombregrupo, curso.nombre);
-              }
-            });
+          List<Horario> horarios = [];
+          try {
+            Response response = await Dio().get(
+              'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombregrupo&nombre=$nombre',
+            );
+            Document document = parse(response.data);
+            List<Element> tablas =
+                document.getElementsByClassName('tabla_letra12');
+            tablas = tablas.getRange(1, tablas.length).toList();
+            for (Element tabla in tablas) {
+              List<Element> filas = tabla.getElementsByTagName("tr");
+              List<String> datos = _scrapHorarios(filas);
+
+              String dia = datos[0];
+              String hora = datos[1];
+              String edificio = datos[2];
+              String profesor = datos[3];
+
+              Horario horario = Horario(
+                  dia: dia, hora: hora, edificio: edificio, profesor: profesor);
+              horarios.add(horario);
+            }
+          } catch (e) {
+            print(e);
           }
-        });
-        print("fin");
+
+          List<int> index = _getIndex(
+              cursos: cursos, codigo: codigo, nombregrupo: nombregrupo);
+
+          cursos[index[0]].grupos[index[1]].capacidad = int.parse(capacidad);
+          cursos[index[0]].grupos[index[1]].matriculados =
+              int.parse(matriculados);
+          cursos[index[0]].grupos[index[1]].horarios = horarios;
+        }
+      } catch (e) {
+        print(e);
       }
     }
     return cursos;
   }
 
-  Future<List<Horario>> _getHorarios(
-      int codigo, String nombreGrupo, String nombre) async {
-    List<Horario> horarios = [];
-    final response = await Dio().get(
-      'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombreGrupo&nombre=$nombre',
-    );
-    var document = parse(response.data);
-    var tablas = document.getElementsByClassName('tabla_letra12');
-    print(tablas);
-    return horarios;
+  List<String> _scrapCursos(List<Element> filas) {
+    String nombre = filas[0].getElementsByTagName("td")[0].text.trim();
+    String codigo = filas[0]
+        .getElementsByTagName("td")[1]
+        .text
+        .split(':')[1]
+        .replaceAll(new RegExp(r"\s+"), "");
+    String nombregrupo = filas[1]
+        .getElementsByTagName("td")
+        .first
+        .text
+        .split(':')[1]
+        .replaceAll(new RegExp(r"\s+"), "");
+    String capacidad = filas[2]
+        .getElementsByTagName("td")[0]
+        .text
+        .split(':')[1]
+        .replaceAll(new RegExp(r"\s+"), "");
+    String matriculados = filas[2]
+        .getElementsByTagName("td")[1]
+        .text
+        .split(':')[1]
+        .replaceAll(new RegExp(r"\s+"), "");
+    return [nombre, codigo, nombregrupo, capacidad, matriculados];
+  }
+
+  List<String> _scrapHorarios(List<Element> filas) {
+    String dia = filas[0].getElementsByTagName("td")[1].text.trim();
+    String hora = filas[1].getElementsByTagName("td")[1].text.trim();
+    String edificio = filas[2]
+        .getElementsByTagName("td")[1]
+        .text
+        .trim()
+        .replaceAll(new RegExp(r"\s+"), " ");
+    String profesor = filas[3].getElementsByTagName("td")[1].text.trim();
+    return [dia, hora, edificio, profesor];
+  }
+
+  List<int> _getIndex(
+      {List<Curso> cursos, String codigo, String nombregrupo = ''}) {
+    List<int> codigos = cursos.map((curso) => curso.codigo).toList();
+    List<int> index = [];
+    index.add(codigos.indexOf(int.parse(codigo)));
+    if (index[0] > 0) {
+      List<String> grupos =
+          cursos[index[0]].grupos.map((grupo) => grupo.nombreGrupo).toList();
+      index.add(grupos.indexOf(nombregrupo));
+    } else {
+      index.add(-1);
+    }
+
+    return index;
   }
 }
