@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -137,10 +138,12 @@ class ProviderHttp {
 
           List<Horario> horarios = [];
           try {
-            Response response = await Dio().get(
-              'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombregrupo&nombre=$nombre',
-            );
-            Document document = parse(response.data);
+            Response<List<int>> response = await Dio().get(
+                'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombregrupo&nombre=$nombre',
+                options: Options(
+                  responseType: ResponseType.bytes,
+                ));
+            Document document = parse(Latin1Decoder().convert(response.data));
             List<Element> tablas =
                 document.getElementsByClassName('tabla_letra12');
             tablas = tablas.getRange(1, tablas.length).toList();

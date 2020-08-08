@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cupos_uis/src/cubit/curso_cubit.dart';
 import 'package:cupos_uis/src/models/curso.dart';
 import 'package:cupos_uis/src/models/grupo.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cupos_uis/src/models/horario.dart';
 
 class CardGroup extends StatelessWidget {
   final Curso curso;
@@ -104,21 +105,25 @@ class CardGroup extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        curso.grupos[index].nombreGrupo,
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
                   Text(
-                    //TODO Colocar profesores
-                    "MANUEL FELIPE CERPA TORRES",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.italic,
-                    ),
+                    curso.grupos[index].nombreGrupo,
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  Column(
+                    children: Horario.getProfes(curso.grupos[index].horarios)
+                        .map(
+                          (profe) => Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: Text(
+                              profe,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ],
               ),

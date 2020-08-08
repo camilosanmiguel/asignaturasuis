@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 
 class Horario {
@@ -25,10 +27,12 @@ class Horario {
       {'dia': dia, 'hora': hora, 'edificio': edificio, 'profesor': profesor};
 
   static List<String> getProfes(List<Horario> horarios) {
-    List<String> profe;
-    horarios.forEach((horario) {
-      if (!profe.contains(horario.profesor)) profe.add(horario.profesor);
-    });
+    List<String> profe = [];
+    horarios.forEach(
+      (horario) {
+        if (!profe.contains(horario.profesor)) profe.add(horario.profesor);
+      },
+    );
     return profe;
   }
 }
