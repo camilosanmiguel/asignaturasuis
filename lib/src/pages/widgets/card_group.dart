@@ -31,12 +31,7 @@ class CardGroup extends StatelessWidget {
             Column(
               children: <Widget>[
                 linea(),
-                bodyCard(
-                    curso: Curso(
-                        codigo: curso.codigo,
-                        nombre: curso.nombre,
-                        grupos: [grupo]),
-                    context: context)
+                bodyCard(context: context, index: curso.grupos.indexOf(grupo))
               ],
             )
         ],
@@ -79,10 +74,10 @@ class CardGroup extends StatelessWidget {
     );
   }
 
-  Widget bodyCard({Curso curso, BuildContext context}) {
+  Widget bodyCard({BuildContext context, int index}) {
     return InkWell(
       onTap: () {
-        _showModalBottomSheet(context, curso);
+        _showModalBottomSheet(context, index);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
@@ -93,12 +88,15 @@ class CardGroup extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               onTap: () {
                 var cubit = BlocProvider.of<CursoCubit>(context);
-                cubit.toggleFav(cursoToggle: Curso.clone(curso));
+                Curso temp = Curso.clone(curso);
+                temp.grupos.removeWhere((grupo) =>
+                    grupo.nombreGrupo != curso.grupos[index].nombreGrupo);
+                cubit.toggleFav(cursoToggle: temp);
               },
               child: Icon(
                 Icons.favorite,
-                //color: Color(0xffFE7D7D),
-                color: curso.grupos[0].fav ? Color(0xffFE7D7D) : Colors.grey,
+                color:
+                    curso.grupos[index].fav ? Color(0xffFE7D7D) : Colors.grey,
               ),
             ),
             Padding(
@@ -109,12 +107,13 @@ class CardGroup extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        curso.grupos[0].nombreGrupo,
+                        curso.grupos[index].nombreGrupo,
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
                   Text(
+                    //TODO Colocar profesores
                     "MANUEL FELIPE CERPA TORRES",
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -126,15 +125,15 @@ class CardGroup extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                "${curso.grupos[0].matriculados}/${curso.grupos[0].capacidad}",
+                "${curso.grupos[index].matriculados}/${curso.grupos[index].capacidad}",
                 textAlign: TextAlign.right,
                 style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
-                    color:
-                        curso.grupos[0].matriculados < curso.grupos[0].capacidad
-                            ? Color(0xff8BC34A)
-                            : Color(0xffFE7D7D)),
+                    color: curso.grupos[index].matriculados <
+                            curso.grupos[index].capacidad
+                        ? Color(0xff8BC34A)
+                        : Color(0xffFE7D7D)),
               ),
             ),
           ],
@@ -144,7 +143,7 @@ class CardGroup extends StatelessWidget {
   }
 
   //TODO TERMINAR MODAL!!!
-  Future _showModalBottomSheet(BuildContext context, Curso curso) {
+  Future _showModalBottomSheet(BuildContext context, int index) {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -176,20 +175,6 @@ class CardGroup extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text("GRUPO B1"),
                 ),
-                Column(
-                  children: curso.grupos[0].horarios.map((horario) {
-                    Column(
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text("Profesor: "),
-                            Text("pedrito perez")
-                          ],
-                        )
-                      ],
-                    );
-                  }).toList(),
-                )
               ],
             ),
           );

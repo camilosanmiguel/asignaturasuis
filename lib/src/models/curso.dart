@@ -31,7 +31,7 @@ class Curso {
     List<int> codigos = cursos.map((curso) => curso.codigo).toList();
     List<int> index = [];
     index.add(codigos.indexOf(int.parse(codigo)));
-    if (index[0] > 0) {
+    if (!index[0].isNegative) {
       List<String> grupos =
           cursos[index[0]].grupos.map((grupo) => grupo.nombreGrupo).toList();
       index.add(grupos.indexOf(nombregrupo));

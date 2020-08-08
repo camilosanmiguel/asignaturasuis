@@ -65,9 +65,12 @@ class ProviderHttp {
           Response response = await Dio().get(
             'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombregrupo&nombre=$nombre',
           );
+
           Document document = parse(response.data);
+
           List<Element> tablas =
               document.getElementsByClassName('tabla_letra12');
+
           tablas = tablas.getRange(1, tablas.length).toList();
           for (Element tabla in tablas) {
             List<Element> filas = tabla.getElementsByTagName("tr");
@@ -98,7 +101,7 @@ class ProviderHttp {
           )
         ]);
 
-        if (indexCurso > 0) {
+        if (!indexCurso.isNegative) {
           cursosHttp[indexCurso].grupos.add(curso.grupos[0]);
         } else {
           cursosHttp.add(curso);

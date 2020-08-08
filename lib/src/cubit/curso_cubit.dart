@@ -66,15 +66,15 @@ class CursoCubit extends Cubit<List<Curso>> {
     if (SearchCubit().state) {
       await _toggleShared(cursoToggle);
       List<Curso> cursos = []..addAll(state);
-      cursos.forEach((curso) {
-        if (curso.codigo == cursoToggle.codigo) {
-          curso.grupos.forEach((grupo) {
-            if (grupo.nombreGrupo == cursoToggle.grupos[0].nombreGrupo) {
-              grupo.fav = !grupo.fav;
-            }
-          });
-        }
-      });
+
+      List<int> index = Curso.getIndex(
+          cursos: cursos,
+          codigo: "${cursoToggle.codigo}",
+          nombregrupo: cursoToggle.grupos[0].nombreGrupo);
+
+      cursos[index[0]].grupos[index[1]].fav =
+          !cursos[index[0]].grupos[index[1]].fav;
+
       emit(cursos);
     } else {
       await _toggleShared(cursoToggle);
@@ -97,7 +97,7 @@ class CursoCubit extends Cubit<List<Curso>> {
         cursos.removeAt(index[0]);
       }
     } else {
-      if (index[0] != -1) {
+      if (!index[0].isNegative) {
         cursoToggle.grupos[0].fav = true;
         cursos[index[0]].grupos.add(cursoToggle.grupos[0]);
       } else {
@@ -110,9 +110,9 @@ class CursoCubit extends Cubit<List<Curso>> {
 
   Future<List<Curso>> _getCursos() async {
     await Preferencias().init();
-    List<Map<String, dynamic>> datos = jsonDecode(Preferencias().cursos);
+    var datos = jsonDecode(Preferencias().cursos);
     List<Curso> cursos = [];
-    for (Map<String, dynamic> curso in datos) {
+    for (var curso in datos) {
       cursos.add(Curso.fromJson(curso));
     }
     return cursos;

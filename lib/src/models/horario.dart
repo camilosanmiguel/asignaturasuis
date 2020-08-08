@@ -23,4 +23,12 @@ class Horario {
 
   Map<String, dynamic> toJson() =>
       {'dia': dia, 'hora': hora, 'edificio': edificio, 'profesor': profesor};
+
+  static List<String> getProfes(List<Horario> horarios) {
+    List<String> profe;
+    horarios.forEach((horario) {
+      if (!profe.contains(horario.profesor)) profe.add(horario.profesor);
+    });
+    return profe;
+  }
 }
