@@ -32,6 +32,7 @@ dependencies:
   html: ^0.14.0+3
   flutter_bloc: ^6.0.1
   shared_preferences: ^0.5.8
+  liquid_pull_to_refresh: ^2.0.0
 
 
 dev_dependencies:

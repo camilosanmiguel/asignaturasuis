@@ -18,21 +18,35 @@ class SubHeader extends StatelessWidget {
         } else {
           txt = "${state.inSeconds} Segundos";
         }
-
-        return state.isNegative
-            ? Container()
-            : Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  "Actualizado hace $txt",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xff9E9E9E),
+        if (state.isNegative) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text(
+              "Actualizado hace -1 segundos",
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.transparent,
+              ),
+            ),
+          );
+        } else {
+          return state.isNegative
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    "Actualizado hace $txt",
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff9E9E9E),
+                    ),
                   ),
-                ),
-              );
+                );
+        }
       },
     );
   }

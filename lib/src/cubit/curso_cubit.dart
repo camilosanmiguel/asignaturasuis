@@ -18,19 +18,27 @@ class CursoCubit extends Cubit<List<Curso>> {
   }
 
   Future<void> update() async {
-    List<Curso> cursos = await _getCursos();
+    List<Curso> cursos;
+    if (!SearchCubit().state) {
+      cursos = await _getCursos();
 
-    if (cursos.isNotEmpty) {
-      TimeCubit().init(
-        DateTime.parse(Preferencias().tiempo).difference(DateTime.now()),
-      );
+      if (cursos.isNotEmpty) {
+        TimeCubit().init(
+          DateTime.parse(Preferencias().tiempo).difference(DateTime.now()),
+        );
+        emit(cursos);
+        cursos = await ProviderHttp().getCursos(cursos);
+        Preferencias().cursos = json.encode(cursos);
+        TimeCubit().reset();
+      } else {
+        Preferencias().tiempo = '';
+        TimeCubit().init(Duration(seconds: -1));
+      }
       emit(cursos);
-      cursos = await ProviderHttp().getCursos(cursos);
-      Preferencias().cursos = json.encode(cursos);
-      TimeCubit().reset();
     } else {
-      Preferencias().tiempo = '';
-      TimeCubit().init(Duration(seconds: -1));
+      cursos = []..addAll(state);
+      cursos = await ProviderHttp().getCursos(cursos);
+      TimeCubit().reset();
     }
     emit(cursos);
   }

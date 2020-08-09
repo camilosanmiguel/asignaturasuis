@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cupos_uis/src/cubit/curso_cubit.dart';
@@ -20,15 +21,25 @@ class Body extends StatelessWidget {
               texto: "No Tienes Grupos \nGuardados Dale Click En\nBuscar Grupo",
             )
           : Expanded(
-              child: ListView.builder(
-                itemCount: cursos.length,
-                itemBuilder: (_, i) => Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: SizedBox(
-                      width: 320,
-                      child: CardGroup(
-                        curso: cursos[i],
+              child: LiquidPullToRefresh(
+                backgroundColor: Colors.grey,
+                color: Colors.white,
+                height: 50,
+                showChildOpacityTransition: false,
+                onRefresh: () {
+                  var cubit = BlocProvider.of<CursoCubit>(context);
+                  return cubit.update();
+                },
+                child: ListView.builder(
+                  itemCount: cursos.length,
+                  itemBuilder: (_, i) => Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: SizedBox(
+                        width: 320,
+                        child: CardGroup(
+                          curso: cursos[i],
+                        ),
                       ),
                     ),
                   ),

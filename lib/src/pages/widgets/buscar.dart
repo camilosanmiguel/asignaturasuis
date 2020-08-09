@@ -1,3 +1,4 @@
+import 'package:cupos_uis/src/cubit/search_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:cupos_uis/src/search/search_delegate.dart';
 
@@ -10,6 +11,7 @@ class Buscar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        SearchCubit().setFalse();
         showSearch(
           context: context,
           delegate: GrupoSearch(hintText: "Busca Grupo"),
