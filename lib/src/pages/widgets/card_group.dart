@@ -110,6 +110,7 @@ class CardGroup extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: Horario.getProfes(curso.grupos[index].horarios)
                         .map(
                           (profe) => Padding(
@@ -147,19 +148,18 @@ class CardGroup extends StatelessWidget {
     );
   }
 
-  //TODO TERMINAR MODAL!!!
   Future _showModalBottomSheet(BuildContext context, int index) {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.35,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40))),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(
@@ -168,18 +168,42 @@ class CardGroup extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("20252"),
+                      Text("${curso.codigo}",
+                          style: TextStyle(fontWeight: FontWeight.w600)),
                       SizedBox(
                         width: 10,
                       ),
-                      Text("CALCULO I "),
+                      Text(curso.nombre,
+                          style: TextStyle(fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text("GRUPO B1"),
+                  child: Text("Grupo ${curso.grupos[index].nombreGrupo}",
+                      style: TextStyle(fontWeight: FontWeight.w600)),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 40, bottom: 30),
+                  child: Column(
+                      children: Horario.getRows(curso.grupos[index].horarios)
+                          .map((dato) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Text(dato[0],
+                              style: TextStyle(fontWeight: FontWeight.w600)),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(dato[1],
+                                style: TextStyle(fontStyle: FontStyle.italic)),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList()),
+                )
               ],
             ),
           );

@@ -35,4 +35,30 @@ class Horario {
     );
     return profe;
   }
+
+  static List<List<String>> getRows(List<Horario> horarios) {
+    List<List<String>> rows = [];
+    List<String> profes = getProfes(horarios);
+    if (profes.length == 0) {
+      rows.add(["Profesor", profes[0]]);
+      for (Horario horario in horarios) {
+        rows.add(["${horario.dia}", "${horario.edificio}"]);
+      }
+    } else {
+      String temp;
+      for (Horario horario in horarios) {
+        if (temp != null) {
+          if (horario.profesor != temp) {
+            rows.add(["Profesor:", "${horario.profesor}"]);
+            temp = horario.profesor;
+          }
+        } else {
+          rows.add(["Profesor:", "${horario.profesor}"]);
+          temp = horario.profesor;
+        }
+        rows.add(["${horario.dia}:", "${horario.hora} ${horario.edificio}"]);
+      }
+    }
+    return rows;
+  }
 }
