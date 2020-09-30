@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:cupos_uis/src/models/grupo.dart';
+import 'package:asignaturasuis/src/models/grupo.dart';
 
 class Curso {
   final int codigo;

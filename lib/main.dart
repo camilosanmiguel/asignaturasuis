@@ -1,4 +1,4 @@
-import 'package:cupos_uis/src/cubit/curso_cubit.dart';
+import 'package:asignaturasuis/src/cubit/curso_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'src/pages/home/home_page.dart';
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => CursoCubit(),
       child: MaterialApp(
-          title: 'Cupos Uis',
+          title: 'Asignaturas Uis',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             accentColor: Colors.grey,

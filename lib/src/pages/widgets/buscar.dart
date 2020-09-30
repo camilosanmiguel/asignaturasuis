@@ -1,6 +1,6 @@
-import 'package:cupos_uis/src/cubit/search_cubit.dart';
+import 'package:asignaturasuis/src/cubit/search_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:cupos_uis/src/search/search_delegate.dart';
+import 'package:asignaturasuis/src/search/search_delegate.dart';
 
 class Buscar extends StatelessWidget {
   const Buscar({

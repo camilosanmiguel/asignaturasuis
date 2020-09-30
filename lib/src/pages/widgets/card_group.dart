@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cupos_uis/src/cubit/curso_cubit.dart';
-import 'package:cupos_uis/src/models/curso.dart';
-import 'package:cupos_uis/src/models/grupo.dart';
-import 'package:cupos_uis/src/models/horario.dart';
+import 'package:asignaturasuis/src/cubit/curso_cubit.dart';
+import 'package:asignaturasuis/src/models/curso.dart';
+import 'package:asignaturasuis/src/models/grupo.dart';
+import 'package:asignaturasuis/src/models/horario.dart';
 
 class CardGroup extends StatelessWidget {
   final Curso curso;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cupos_uis/src/cubit/time_cubit.dart';
+import 'package:asignaturasuis/src/cubit/time_cubit.dart';
 
 class SubHeader extends StatelessWidget {
   @override

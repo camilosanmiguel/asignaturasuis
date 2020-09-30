@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cupos_uis/src/utils/preferencias.dart';
+import 'package:asignaturasuis/src/utils/preferencias.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TimeCubit extends Cubit<Duration> {

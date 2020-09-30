@@ -1,4 +1,4 @@
-import 'package:cupos_uis/src/models/horario.dart';
+import 'package:asignaturasuis/src/models/horario.dart';
 import 'package:flutter/widgets.dart';
 
 class Grupo {

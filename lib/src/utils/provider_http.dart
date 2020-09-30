@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
-import 'package:cupos_uis/src/models/curso.dart';
-import 'package:cupos_uis/src/models/grupo.dart';
-import 'package:cupos_uis/src/models/horario.dart';
+import 'package:asignaturasuis/src/models/curso.dart';
+import 'package:asignaturasuis/src/models/grupo.dart';
+import 'package:asignaturasuis/src/models/horario.dart';
 
 class ProviderHttp {
   static final ProviderHttp _instance = ProviderHttp._ctor();

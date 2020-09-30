@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cupos_uis/src/pages/widgets/buscar.dart';
+import 'package:asignaturasuis/src/pages/widgets/buscar.dart';
 
 class Header extends StatelessWidget {
   @override

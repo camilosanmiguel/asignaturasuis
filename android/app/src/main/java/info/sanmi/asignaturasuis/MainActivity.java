@@ -1,4 +1,4 @@
-package info.sanmi.cupos_uis;
+package info.sanmi.asignaturasuis;
 
 import io.flutter.embedding.android.FlutterActivity;
 

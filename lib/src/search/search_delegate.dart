@@ -1,11 +1,11 @@
-import 'package:cupos_uis/src/cubit/time_cubit.dart';
-import 'package:cupos_uis/src/pages/widgets/texto.dart';
+import 'package:asignaturasuis/src/cubit/time_cubit.dart';
+import 'package:asignaturasuis/src/pages/widgets/texto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cupos_uis/src/cubit/curso_cubit.dart';
-import 'package:cupos_uis/src/cubit/search_cubit.dart';
-import 'package:cupos_uis/src/pages/home/widgets/body.dart';
-import 'package:cupos_uis/src/pages/home/widgets/subheader.dart';
+import 'package:asignaturasuis/src/cubit/curso_cubit.dart';
+import 'package:asignaturasuis/src/cubit/search_cubit.dart';
+import 'package:asignaturasuis/src/pages/home/widgets/body.dart';
+import 'package:asignaturasuis/src/pages/home/widgets/subheader.dart';
 
 class GrupoSearch extends SearchDelegate {
   GrupoSearch({@required String hintText})

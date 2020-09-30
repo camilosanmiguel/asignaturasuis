@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cupos_uis/src/cubit/curso_cubit.dart';
-import 'package:cupos_uis/src/models/curso.dart';
+import 'package:asignaturasuis/src/cubit/curso_cubit.dart';
+import 'package:asignaturasuis/src/models/curso.dart';
 
-import 'package:cupos_uis/src/pages/widgets/card_group.dart';
-import 'package:cupos_uis/src/pages/widgets/texto.dart';
+import 'package:asignaturasuis/src/pages/widgets/card_group.dart';
+import 'package:asignaturasuis/src/pages/widgets/texto.dart';
 
 class Body extends StatelessWidget {
   const Body({

@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
-import 'package:cupos_uis/src/cubit/search_cubit.dart';
-import 'package:cupos_uis/src/cubit/time_cubit.dart';
-import 'package:cupos_uis/src/models/curso.dart';
-import 'package:cupos_uis/src/utils/preferencias.dart';
-import 'package:cupos_uis/src/utils/provider_http.dart';
+import 'package:asignaturasuis/src/cubit/search_cubit.dart';
+import 'package:asignaturasuis/src/cubit/time_cubit.dart';
+import 'package:asignaturasuis/src/models/curso.dart';
+import 'package:asignaturasuis/src/utils/preferencias.dart';
+import 'package:asignaturasuis/src/utils/provider_http.dart';
 
 class CursoCubit extends Cubit<List<Curso>> {
   static final CursoCubit _instance = CursoCubit._internal();
