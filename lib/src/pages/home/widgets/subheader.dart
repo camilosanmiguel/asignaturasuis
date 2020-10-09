@@ -32,20 +32,18 @@ class SubHeader extends StatelessWidget {
             ),
           );
         } else {
-          return state.isNegative
-              ? Container()
-              : Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Text(
-                    "Actualizado hace $txt",
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff9E9E9E),
-                    ),
-                  ),
-                );
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text(
+              "Actualizado hace $txt",
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff9E9E9E),
+              ),
+            ),
+          );
         }
       },
     );

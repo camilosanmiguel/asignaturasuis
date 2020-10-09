@@ -10,7 +10,6 @@ class Texto extends StatelessWidget {
       child: Center(
         child: Text(
           texto,
-          textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: Color(0xff9E9E9E),

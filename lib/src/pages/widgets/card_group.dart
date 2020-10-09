@@ -13,7 +13,6 @@ class CardGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      //width: 280,
       decoration: BoxDecoration(
         color: Color(0xFFEDEDED),
         borderRadius: BorderRadius.circular(20),
@@ -62,7 +61,6 @@ class CardGroup extends StatelessWidget {
       height: 0.5,
       decoration: BoxDecoration(
         color: Colors.grey[400],
-        //color: Colors.red,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -83,7 +81,7 @@ class CardGroup extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             InkWell(
               borderRadius: BorderRadius.circular(20),
@@ -100,8 +98,8 @@ class CardGroup extends StatelessWidget {
                     curso.grupos[index].fav ? Color(0xffFE7D7D) : Colors.grey,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+            SizedBox(
+              width: 200,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -129,18 +127,16 @@ class CardGroup extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(
-              child: Text(
-                "${curso.grupos[index].matriculados}/${curso.grupos[index].capacidad}",
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: curso.grupos[index].matriculados <
-                            curso.grupos[index].capacidad
-                        ? Color(0xff8BC34A)
-                        : Color(0xffFE7D7D)),
-              ),
+            Text(
+              "${curso.grupos[index].matriculados}/${curso.grupos[index].capacidad}",
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: curso.grupos[index].matriculados <
+                          curso.grupos[index].capacidad
+                      ? Color(0xff8BC34A)
+                      : Color(0xffFE7D7D)),
             ),
           ],
         ),
