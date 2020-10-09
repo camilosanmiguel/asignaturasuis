@@ -41,14 +41,17 @@ class ProviderHttp {
 
     try {
       Response response = await _dio.post(
-          'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
-          data: {
-            "nombre": "$nombre",
-            "codigo": "$codigo",
-            "parametro": "$parametro"
-          },
-          options: Options(contentType: Headers.formUrlEncodedContentType));
-      Document document = parse(response.data);
+        'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
+        data: {
+          "nombre": "$nombre",
+          "codigo": "$codigo",
+          "parametro": "$parametro"
+        },
+        options: Options(
+            contentType: Headers.formUrlEncodedContentType,
+            responseType: ResponseType.bytes),
+      );
+      Document document = parse(Latin1Decoder().convert(response.data));
       List<Element> tablas = document.getElementsByClassName('tabla');
 
       for (Element tabla in tablas) {
@@ -64,10 +67,11 @@ class ProviderHttp {
         List<Horario> horarios = [];
         try {
           Response response = await Dio().get(
-            'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombregrupo&nombre=$nombre',
-          );
-
-          Document document = parse(response.data);
+              'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo=$codigo&grupo=$nombregrupo&nombre=$nombre',
+              options: Options(
+                responseType: ResponseType.bytes,
+              ));
+          Document document = parse(Latin1Decoder().convert(response.data));
 
           List<Element> tablas =
               document.getElementsByClassName('tabla_letra12');
@@ -122,8 +126,11 @@ class ProviderHttp {
         Response response = await _dio.post(
             'https://www.uis.edu.co/estudiantes/asignaturas_programadas/resultado_buscador.jsp',
             data: {"nombre": "", "codigo": "$codigo", "parametro": "2"},
-            options: Options(contentType: Headers.formUrlEncodedContentType));
-        Document document = parse(response.data);
+            options: Options(
+            contentType: Headers.formUrlEncodedContentType,
+            responseType: ResponseType.bytes),
+      );
+      Document document = parse(Latin1Decoder().convert(response.data));
         List<Element> tablas = document.getElementsByClassName('tabla');
 
         for (Element tabla in tablas) {

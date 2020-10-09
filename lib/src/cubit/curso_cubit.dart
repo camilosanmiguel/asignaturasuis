@@ -21,7 +21,6 @@ class CursoCubit extends Cubit<List<Curso>> {
     List<Curso> cursos;
     if (!SearchCubit().state) {
       cursos = await _getCursos();
-
       if (cursos.isNotEmpty) {
         TimeCubit().init(
           DateTime.parse(Preferencias().tiempo).difference(DateTime.now()),
